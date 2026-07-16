@@ -12,10 +12,11 @@ import { useApps } from '@/hooks/useApps';
 import { useSites } from '@/hooks/useSites';
 import { useCategories } from '@/hooks/useCategories';
 import { FeaturedModel } from '@/models';
-import { toast } from 'react-hot-toast';
+import { useNotification } from '@/contexts/NotificationContext';
 import { cn } from '@/utils/cn';
 
 const FeaturedPage: React.FC = () => {
+  const { showNotification } = useNotification();
   const { featuredItems, isLoading, totalCount } = useFeatured();
   const { mutate: createFeatured, isPending: isCreating } = useCreateFeatured();
   const { mutate: updatePriority } = useUpdateFeaturedPriority();
@@ -34,7 +35,7 @@ const FeaturedPage: React.FC = () => {
 
   const handleAdd = () => {
     if (!newId) {
-      toast.error('Selecione um item');
+      showNotification('Selecione um item', 'error');
       return;
     }
 
@@ -42,11 +43,11 @@ const FeaturedPage: React.FC = () => {
       { itemId: newId, type: newType, priority: totalCount, active: true },
       {
         onSuccess: () => {
-          toast.success('Destaque adicionado!');
+          showNotification('Destaque adicionado!', 'success');
           setIsAddOpen(false);
           setNewId('');
         },
-        onError: () => toast.error('Erro ao adicionar destaque.')
+        onError: () => showNotification('Erro ao adicionar destaque.', 'error')
       }
     );
   };
@@ -68,9 +69,10 @@ const FeaturedPage: React.FC = () => {
     if (selectedItem) {
       deleteFeatured(selectedItem.id, {
         onSuccess: () => {
-          toast.success('Destaque removido');
+          showNotification('Destaque removido', 'success');
           setIsDeleteDialogOpen(false);
-        }
+        },
+        onError: () => showNotification('Erro ao remover destaque.', 'error')
       });
     }
   };

@@ -10,10 +10,11 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { useHomeSlider, useCreateHomeSlide, useUpdateHomeSlide, useDeleteHomeSlide, useUpdateHomeSlideOrder } from '@/hooks/useHomeSlider';
 import { HomeSlideModel } from '@/models';
 import { HomeSliderForm } from './HomeSliderForm';
-import { toast } from 'react-hot-toast';
+import { useNotification } from '@/contexts/NotificationContext';
 import { cn } from '@/utils/cn';
 
 const HomeSliderPage: React.FC = () => {
+  const { showNotification } = useNotification();
   const { slides, isLoading, totalCount } = useHomeSlider();
   const { mutate: createSlide, isPending: isCreating } = useCreateHomeSlide();
   const { mutate: updateSlide, isPending: isUpdating } = useUpdateHomeSlide();
@@ -45,10 +46,10 @@ const HomeSliderPage: React.FC = () => {
         { id: selectedSlide.id, data },
         {
           onSuccess: () => {
-            toast.success('Slide atualizado!');
+            showNotification('Slide atualizado!', 'success');
             setIsFormOpen(false);
           },
-          onError: () => toast.error('Erro ao atualizar slide.')
+          onError: () => showNotification('Erro ao atualizar slide.', 'error')
         }
       );
     } else {
@@ -56,10 +57,10 @@ const HomeSliderPage: React.FC = () => {
         { data },
         {
           onSuccess: () => {
-            toast.success('Slide criado!');
+            showNotification('Slide criado!', 'success');
             setIsFormOpen(false);
           },
-          onError: () => toast.error('Erro ao criar slide.')
+          onError: () => showNotification('Erro ao criar slide.', 'error')
         }
       );
     }
@@ -82,9 +83,10 @@ const HomeSliderPage: React.FC = () => {
     if (selectedSlide) {
       deleteSlide(selectedSlide.id, {
         onSuccess: () => {
-          toast.success('Slide removido');
+          showNotification('Slide removido', 'success');
           setIsDeleteDialogOpen(false);
-        }
+        },
+        onError: () => showNotification('Erro ao remover slide', 'error')
       });
     }
   };

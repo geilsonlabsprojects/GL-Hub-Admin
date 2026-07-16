@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { SearchBar } from '@/components/ui/SearchBar';
 import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@/hooks/useCategories';
 import { CategoryModel } from '@/models';
-import { toast } from 'react-hot-toast';
+import { useNotification } from '@/contexts/NotificationContext';
 
 const CategoriesPage: React.FC = () => {
   // Hooks
@@ -26,6 +26,8 @@ const CategoriesPage: React.FC = () => {
   const { mutate: createCategory, isPending: isCreating } = useCreateCategory();
   const { mutate: updateCategory, isPending: isUpdating } = useUpdateCategory();
   const { mutate: deleteCategory, isPending: isDeleting } = useDeleteCategory();
+
+  const { showNotification } = useNotification();
 
   // State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -54,11 +56,11 @@ const CategoriesPage: React.FC = () => {
         { id: selectedCategory.id, data },
         {
           onSuccess: () => {
-            toast.success('Categoria atualizada com sucesso!');
+            showNotification('Categoria atualizada com sucesso!', 'success');
             setIsFormOpen(false);
           },
           onError: () => {
-            toast.error('Erro ao atualizar categoria.');
+            showNotification('Erro ao atualizar categoria.', 'error');
           }
         }
       );
@@ -67,11 +69,11 @@ const CategoriesPage: React.FC = () => {
         { data },
         {
           onSuccess: () => {
-            toast.success('Categoria criada com sucesso!');
+            showNotification('Categoria criada com sucesso!', 'success');
             setIsFormOpen(false);
           },
           onError: () => {
-            toast.error('Erro ao criar categoria.');
+            showNotification('Erro ao criar categoria.', 'error');
           }
         }
       );
@@ -82,11 +84,11 @@ const CategoriesPage: React.FC = () => {
     if (selectedCategory) {
       deleteCategory(selectedCategory.id, {
         onSuccess: () => {
-          toast.success('Categoria excluída com sucesso!');
+          showNotification('Categoria excluída com sucesso!', 'success');
           setIsDeleteDialogOpen(false);
         },
         onError: () => {
-          toast.error('Erro ao excluir categoria.');
+          showNotification('Erro ao excluir categoria.', 'error');
         }
       });
     }

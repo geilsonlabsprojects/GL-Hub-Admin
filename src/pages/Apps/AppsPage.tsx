@@ -16,7 +16,7 @@ import { useUpdateApp } from '@/hooks/useUpdateApp';
 import { useDeleteApp } from '@/hooks/useDeleteApp';
 import { useDuplicateApp } from '@/hooks/useDuplicateApp';
 import { AppModel } from '@/models';
-import { toast } from 'react-hot-toast';
+import { useNotification } from '@/contexts/NotificationContext';
 
 const AppsPage: React.FC = () => {
   // Hooks
@@ -33,6 +33,8 @@ const AppsPage: React.FC = () => {
   const { updateApp, isLoading: isUpdating } = useUpdateApp();
   const { deleteApp, isLoading: isDeleting } = useDeleteApp();
   const { duplicateApp, isLoading: isDuplicating } = useDuplicateApp();
+
+  const { showNotification } = useNotification();
 
   // State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -76,22 +78,22 @@ const AppsPage: React.FC = () => {
         { appId: selectedApp.appId, data },
         {
           onSuccess: () => {
-            toast.success('Aplicativo atualizado com sucesso!');
+            showNotification('Aplicativo atualizado com sucesso!', 'success');
             setIsFormOpen(false);
           },
           onError: () => {
-            toast.error('Erro ao atualizar aplicativo.');
+            showNotification('Erro ao atualizar aplicativo.', 'error');
           }
         }
       );
     } else {
       createApp(data, {
         onSuccess: () => {
-          toast.success('Aplicativo criado com sucesso!');
+          showNotification('Aplicativo criado com sucesso!', 'success');
           setIsFormOpen(false);
         },
         onError: () => {
-          toast.error('Erro ao criar aplicativo.');
+          showNotification('Erro ao criar aplicativo.', 'error');
         }
       });
     }
@@ -101,11 +103,11 @@ const AppsPage: React.FC = () => {
     if (selectedApp) {
       deleteApp(selectedApp.appId, {
         onSuccess: () => {
-          toast.success('Aplicativo excluído com sucesso!');
+          showNotification('Aplicativo excluído com sucesso!', 'success');
           setIsDeleteDialogOpen(false);
         },
         onError: () => {
-          toast.error('Erro ao excluir aplicativo.');
+          showNotification('Erro ao excluir aplicativo.', 'error');
         }
       });
     }
@@ -117,11 +119,11 @@ const AppsPage: React.FC = () => {
         { sourceAppId: selectedApp.appId, newAppId },
         {
           onSuccess: () => {
-            toast.success('Aplicativo duplicado com sucesso!');
+            showNotification('Aplicativo duplicado com sucesso!', 'success');
             setIsDuplicateDialogOpen(false);
           },
           onError: () => {
-            toast.error('Erro ao duplicar aplicativo.');
+            showNotification('Erro ao duplicar aplicativo.', 'error');
           }
         }
       );

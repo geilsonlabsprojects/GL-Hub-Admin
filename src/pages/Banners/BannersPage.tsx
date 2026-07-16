@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { SearchBar } from '@/components/ui/SearchBar';
 import { useBanners, useCreateBanner, useUpdateBanner, useDeleteBanner } from '@/hooks/useBanners';
 import { BannerModel } from '@/models';
-import { toast } from 'react-hot-toast';
+import { useNotification } from '@/contexts/NotificationContext';
 
 const BannersPage: React.FC = () => {
   // Hooks
@@ -26,6 +26,8 @@ const BannersPage: React.FC = () => {
   const { mutate: createBanner, isPending: isCreating } = useCreateBanner();
   const { mutate: updateBanner, isPending: isUpdating } = useUpdateBanner();
   const { mutate: deleteBanner, isPending: isDeleting } = useDeleteBanner();
+
+  const { showNotification } = useNotification();
 
   // State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -54,11 +56,11 @@ const BannersPage: React.FC = () => {
         { id: selectedBanner.id, data },
         {
           onSuccess: () => {
-            toast.success('Banner atualizado com sucesso!');
+            showNotification('Banner atualizado com sucesso!', 'success');
             setIsFormOpen(false);
           },
           onError: () => {
-            toast.error('Erro ao atualizar banner.');
+            showNotification('Erro ao atualizar banner.', 'error');
           }
         }
       );
@@ -67,11 +69,11 @@ const BannersPage: React.FC = () => {
         { data },
         {
           onSuccess: () => {
-            toast.success('Banner criado com sucesso!');
+            showNotification('Banner criado com sucesso!', 'success');
             setIsFormOpen(false);
           },
           onError: () => {
-            toast.error('Erro ao criar banner.');
+            showNotification('Erro ao criar banner.', 'error');
           }
         }
       );
@@ -82,11 +84,11 @@ const BannersPage: React.FC = () => {
     if (selectedBanner) {
       deleteBanner(selectedBanner.id, {
         onSuccess: () => {
-          toast.success('Banner excluído com sucesso!');
+          showNotification('Banner excluído com sucesso!', 'success');
           setIsDeleteDialogOpen(false);
         },
         onError: () => {
-          toast.error('Erro ao excluir banner.');
+          showNotification('Erro ao excluir banner.', 'error');
         }
       });
     }
