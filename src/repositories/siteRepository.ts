@@ -1,4 +1,4 @@
-import { ref, get, child } from "firebase/database";
+import { ref, get, child, set, update, remove } from "firebase/database";
 import { db } from "@/firebase/config";
 import { SiteModel } from "@/models";
 
@@ -15,13 +15,45 @@ export const siteRepository = {
     return [];
   },
 
-  getById: async (id: string): Promise<SiteModel | null> => {
+  getById: async (siteId: string): Promise<SiteModel | null> => {
     const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, `${PATH}/${id}`));
+    const snapshot = await get(child(dbRef, `${PATH}/${siteId}`));
     if (snapshot.exists()) {
       return snapshot.val() as SiteModel;
     }
     return null;
+  },
+
+  create: async (site: SiteModel): Promise<void> => {
+    await set(ref(db, `${PATH}/${site.siteId}`), site);
+  },
+
+  update: async (siteId: string, data: Partial<SiteModel>): Promise<void> => {
+    await update(ref(db, `${PATH}/${siteId}`), data);
+  },
+
+  delete: async (siteId: string): Promise<void> => {
+    await remove(ref(db, `${PATH}/${siteId}`));
+  },
+
+  checkSiteIdExists: async (siteId: string): Promise<boolean> => {
+    const dbRef = ref(db);
+    const snapshot = await get(child(dbRef, `${PATH}/${siteId}`));
+    return snapshot.exists();
+  },
+
+  duplicate: async (sourceSiteId: string, newSiteId: string): Promise<void> => {
+    const sourceSite = await siteRepository.getById(sourceSiteId);
+    if (!sourceSite) throw new Error("Source site not found");
+
+    const duplicatedSite: SiteModel = {
+      ...sourceSite,
+      siteId: newSiteId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    await siteRepository.create(duplicatedSite);
   },
 
   count: async (): Promise<number> => {
