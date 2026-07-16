@@ -1,37 +1,37 @@
 import { ref, get, child, set, push, update, remove } from "firebase/database";
 import { db } from "@/firebase/config";
-import { BannerModel } from "@/models";
+import { HomeSlideModel } from "@/models";
 
-const PATH = "banners";
+const PATH = "homeSlides";
 
-export const bannerRepository = {
-  getAll: async (): Promise<BannerModel[]> => {
+export const homeSliderRepository = {
+  getAll: async (): Promise<HomeSlideModel[]> => {
     const dbRef = ref(db);
     const snapshot = await get(child(dbRef, PATH));
     if (snapshot.exists()) {
       const data = snapshot.val();
-      return Object.values(data) as BannerModel[];
+      return Object.values(data) as HomeSlideModel[];
     }
     return [];
   },
 
-  getById: async (id: string): Promise<BannerModel | null> => {
+  getById: async (id: string): Promise<HomeSlideModel | null> => {
     const dbRef = ref(db);
     const snapshot = await get(child(dbRef, `${PATH}/${id}`));
     if (snapshot.exists()) {
-      return snapshot.val() as BannerModel;
+      return snapshot.val() as HomeSlideModel;
     }
     return null;
   },
 
-  create: async (data: Omit<BannerModel, 'id'>): Promise<string> => {
+  create: async (data: Omit<HomeSlideModel, 'id'>): Promise<string> => {
     const newRef = push(ref(db, PATH));
     const id = newRef.key as string;
     await set(newRef, { ...data, id });
     return id;
   },
 
-  update: async (id: string, data: Partial<BannerModel>): Promise<void> => {
+  update: async (id: string, data: Partial<HomeSlideModel>): Promise<void> => {
     await update(ref(db, `${PATH}/${id}`), data);
   },
 
@@ -39,8 +39,7 @@ export const bannerRepository = {
     await remove(ref(db, `${PATH}/${id}`));
   },
 
-  count: async (): Promise<number> => {
-    const list = await bannerRepository.getAll();
-    return list.length;
+  updateOrder: async (id: string, order: number): Promise<void> => {
+    await update(ref(db, `${PATH}/${id}`), { order });
   }
 };

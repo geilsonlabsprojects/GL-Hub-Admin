@@ -1,4 +1,4 @@
-import { ref, get, child } from "firebase/database";
+import { ref, get, child, set, push, update, remove } from "firebase/database";
 import { db } from "@/firebase/config";
 import { CategoryModel } from "@/models";
 
@@ -22,6 +22,21 @@ export const categoryRepository = {
       return snapshot.val() as CategoryModel;
     }
     return null;
+  },
+
+  create: async (data: Omit<CategoryModel, 'id'>): Promise<string> => {
+    const newRef = push(ref(db, PATH));
+    const id = newRef.key as string;
+    await set(newRef, { ...data, id });
+    return id;
+  },
+
+  update: async (id: string, data: Partial<CategoryModel>): Promise<void> => {
+    await update(ref(db, `${PATH}/${id}`), data);
+  },
+
+  delete: async (id: string): Promise<void> => {
+    await remove(ref(db, `${PATH}/${id}`));
   },
 
   count: async (): Promise<number> => {

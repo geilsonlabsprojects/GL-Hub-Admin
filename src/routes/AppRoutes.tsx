@@ -14,6 +14,8 @@ import Categories from '@/pages/Categories/CategoriesPage';
 import Versions from '@/pages/Versions/VersionsPage';
 import News from '@/pages/News/NewsPage';
 import Banners from '@/pages/Banners/BannersPage';
+import Featured from '@/pages/Featured/FeaturedPage';
+import HomeSlider from '@/pages/HomeSlider/HomeSliderPage';
 import Users from '@/pages/Users/UsersPage';
 import Logs from '@/pages/Logs/LogsPage';
 import Settings from '@/pages/Settings/SettingsPage';
@@ -64,6 +66,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/versions" element={<Versions />} />
         <Route path="/news" element={<News />} />
         <Route path="/banners" element={<Banners />} />
+        <Route path="/featured" element={<Featured />} />
+        <Route path="/home-slider" element={<HomeSlider />} />
         <Route path="/users" element={<Users />} />
         <Route path="/logs" element={<Logs />} />
         <Route path="/settings" element={<Settings />} />

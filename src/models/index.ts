@@ -9,3 +9,5 @@ export * from './bannerModel';
 export * from './settingsModel';
 export * from './logModel';
 export * from './downloadModel';
+export * from './featuredModel';
+export * from './homeSlideModel';

@@ -11,3 +11,7 @@ export * from './useDuplicateSite';
 export * from './useNews';
 export * from './useUsers';
 export * from './useDashboard';
+export * from './useCategories';
+export * from './useBanners';
+export * from './useFeatured';
+export * from './useHomeSlider';

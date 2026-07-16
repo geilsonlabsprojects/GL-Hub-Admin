@@ -9,3 +9,5 @@ export * from './bannerRepository';
 export * from './settingsRepository';
 export * from './logRepository';
 export * from './downloadRepository';
+export * from './featuredRepository';
+export * from './homeSliderRepository';

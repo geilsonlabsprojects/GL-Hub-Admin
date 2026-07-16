@@ -12,3 +12,5 @@ export * from './downloadService';
 export * from './dashboardService';
 export * from './notificationService';
 export * from './imgbbService';
+export * from './featuredService';
+export * from './homeSliderService';
