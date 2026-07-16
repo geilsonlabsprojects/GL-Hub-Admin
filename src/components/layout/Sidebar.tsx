@@ -42,8 +42,8 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen transition-all duration-300 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex flex-col',
-        collapsed ? 'w-20' : 'w-64'
+        'fixed left-0 top-0 z-50 h-screen transition-all duration-300 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex flex-col',
+        collapsed ? 'w-20 -translate-x-full md:translate-x-0' : 'w-64 translate-x-0'
       )}
     >
       {/* Header / Toggle */}

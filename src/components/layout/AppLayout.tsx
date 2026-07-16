@@ -11,15 +11,23 @@ export const AppLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+      {/* Mobile Overlay */}
+      {!sidebarCollapsed && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300"
+          onClick={() => setSidebarCollapsed(true)}
+        />
+      )}
+
       <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
       <div
         className={cn(
           'transition-all duration-300 flex flex-col min-h-screen',
-          sidebarCollapsed ? 'pl-20' : 'pl-64'
+          sidebarCollapsed ? 'md:pl-20' : 'md:pl-64'
         )}
       >
-        <Topbar />
+        <Topbar onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
         <main className="flex-1 mt-16 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">

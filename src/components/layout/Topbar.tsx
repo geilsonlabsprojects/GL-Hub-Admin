@@ -13,15 +13,30 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '../ui/Button';
 import { SearchBar } from '../ui/SearchBar';
 import { cn } from '@/utils/cn';
+import { Menu } from 'lucide-react';
 
-export const Topbar = () => {
+interface TopbarProps {
+  onToggleSidebar?: () => void;
+}
+
+export const Topbar = ({ onToggleSidebar }: TopbarProps) => {
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   return (
     <header className="h-16 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md fixed top-0 right-0 left-0 z-30 px-4 transition-all duration-300">
-      <div className="h-full flex items-center justify-between gap-4 max-w-7xl mx-auto md:px-4">
+      <div className="h-full flex items-center justify-between gap-4 max-w-7xl mx-auto">
+
+        {/* Mobile Menu Toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={onToggleSidebar}
+        >
+          <Menu className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+        </Button>
 
         {/* Mobile Spacer / Search on desktop */}
         <div className="flex-1 hidden md:block">
